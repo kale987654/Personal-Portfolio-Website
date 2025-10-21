@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../../../3css/otherResource/reset.css">
+  <link rel="stylesheet" href="//at.alicdn.com/t/c/font_5015401_b7u2fu9rzda.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .info_table {
+      width: 1190px;
+      margin: 0 auto;
+      /* background-color: gray; */
+      display: flex;
+      flex-direction: column;
+    }
+    .info_table h1 {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 0 auto;
+      margin-top: 30px;
+      margin-bottom: 50px;
+    }
+    /* #region表单 */
+    .info_table .info_get {
+      width: 100%;
+      margin: 0 auto;
+      font-size: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 50px;
+    }
+    .info_get input,
+    .info_get select,
+    .info_get button {
+      width: 100px;
+      height: 25px;
+      box-sizing: border-box;
+      border: 1px solid black;
+      border-radius: 4px;
+    }
+    .info_get input {
+      font-size: 14px;
+      padding-left: 5px;
+    }
+    .info_get button {
+      width: 60px;
+      background-color: rgba(0, 255, 255, 0.586);
+      font-size: 0;
+    }
+    .info_get button i {
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .info_get button span {
+      font-size: 14px;
+    }
+    /* #endregion表单 */
+  
+    /* #region表格 */
+    .info_controls {
+      width: 860px;
+      margin: 0 auto;
+    }
+    .info_controls .row_counts {
+      height: 40px;  
+      background-color: rgba(128, 128, 128, 0.37);
+      position: relative;
+      margin-bottom: 10px;
+    }
+    .row_counts span {
+      font-size: 14px;
+      font-weight: bold;
+      position: absolute;
+      right: 10px;
+      bottom: 5px;
+    }
+    .info_controls table{
+      width: 100%;
+      margin: 0 auto;
+      border: 0;
+      border-collapse: collapse;
+      table-layout: auto;
+    }
+    .info_controls th {
+      height: 40px;
+      font-size: 16px;
+      border: 0;
+      background-color: rgba(128, 128, 128, 0.37)
+    }
+    .info_controls th.id {
+      width: 50px;
+    }
+    .info_controls th.uname {
+      width: 120px;
+    }
+    .info_controls th.age {
+      width: 70px;
+    }
+    .info_controls th.gender {
+      width: 70px;
+    }
+    .info_controls th.salary {
+      width: 100px;
+    }
+    .info_controls th.address {
+      width: 120px;
+    }
+    .info_controls th.date {
+      width: 180px;
+    }
+    .info_controls th.control {
+      width: 150px;
+    }
+    .info_controls td {
+      border: 1px solid rgba(128, 128, 128, 0.37);
+      box-sizing: border-box;
+      height: 40px;
+      font-size: 15px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 40px;
+      color: rgb(128, 128, 128);
+    }
+    .info_controls td.delete {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    td.delete span {
+      width: 80px;
+      height: 24px;
+      background-color: orange;
+      text-align: center;
+      line-height: 24px;
+      font-weight: lighter;
+      color: white;
+      cursor: pointer;
+    }
+    /* #endregion表格 */
+  </style>
+</head>
+<body>
+  <div class="info_table">
+    <h1>学生就业统计表</h1>
+    <form action="#" class="info_get" autocomplete="off">
+      <input type="text" name="uname" class="uname" placeholder="姓名">
+      <input type="number" name="age" class="age" placeholder="年龄">
+      <input type="number" name="salary" class="salary" placeholder="薪资">
+      <select name="gender" class="gender">
+        <option value="男">男</option>
+        <option value="女">女</option>
+      </select>
+      <select name="address" class="address">
+        <option value="beijing">北京</option>
+        <option value="shenzhen">深圳</option>
+        <option value="shanghai">上海</option>
+        <option value="guangzhou">广州</option>
+        <option value="chengdu">成都</option>
+        <option value="wuhan">武汉</option>
+        <option value="changsha">长沙</option>
+      </select>
+      <button>
+        <i class="iconfont icon-tianjia"></i>
+        <span>添加</span>
+      </button>
+    </form>
+    <div class="info_controls">
+      <div class="row_counts"></div>
+      <table>
+        <thead>
+          <tr>
+            <th class="id">ID</th>
+            <th class="uname">姓名</th>
+            <th class="age">年龄</th>
+            <th class="gender">性别</th>
+            <th class="salary">薪资</th>
+            <th class="address">就业城市</th>
+            <th class="date">录入时间</th>
+            <th class="control">操作</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    /* --1.获取数据，本地存储，单行地渲染表格，
+        --索引
+       --3.删除行，改序号，
+        --索引
+       --4.输入校验，警示信息，
+        --索引
+       --5.页面刷新，从本地拉取数据，渲染表格，
+        --索引
+    */ 
+    // 获取表单数据
+    const form = document.querySelector('.info_get')
+    const uname = document.querySelector('.info_get .uname')
+    const age = document.querySelector('.info_get .age')
+    const gender = document.querySelector('.info_get .gender')
+    const salary = document.querySelector('.info_get .salary')
+    const address = document.querySelector('.info_get .address')
+    // console.log(uname)
+    // 获取行数统计
+    const row_count = document.querySelector('.info_controls .row_counts')
+    // 获取tbody
+    const tbody = document.querySelector('.info_controls tbody')
+    // console.log(tbody)
+    // 数据行统计函数
+    function updateRowCount() {
+      if(JSON.parse(localStorage.getItem('info_table'))){
+        const info_table = JSON.parse(localStorage.getItem('info_table'))
+        const count = info_table.length
+        // console.log(count)
+        row_count.innerHTML = `
+          <span>共有数据${count}条</span>
+        `
+      }else {
+        row_count.innerHTML = `
+          <span>共有数据0条</span>
+        `
+      }
+    }
+    // 页面刷新，从本地拉取数据，渲染表格
+    function refresh_table() {
+      const info_table = JSON.parse(localStorage.getItem('info_table'))
+      if(info_table){
+        for(let i = 0; i < info_table.length; i++){
+          // 获取它爹
+          const tbody = document.querySelector('.info_controls tbody')
+          // 创建一行
+          const tb_tr = document.createElement('tr')
+          tb_tr.innerHTML = `
+            <td data-id='${info_table[i].ID}'>${info_table[i].ID}</td>
+            <td>${info_table[i].uname}</td>
+            <td>${info_table[i].age}</td>
+            <td>${info_table[i].gender}</td>
+            <td>${info_table[i].salary}</td>
+            <td>${info_table[i].address}</td>
+            <td>${info_table[i].date}</td>
+            <td class='delete'>
+              <span><i class="iconfont icon-shanchu"></i>删除<span>
+            </td>
+          `
+          tbody.appendChild(tb_tr)
+        }
+      }
+    }
+    // 页面刷新调用
+    window.addEventListener('load',function(){
+      // 刷新就从本地抓取数据，渲染
+      refresh_table()
+      // 更新统计行数
+      updateRowCount()
+    })
+    // const info_table = localStorage.getItem('info_table')
+    // console.log(info_table)
+    // 渲染一行的函数
+    function render_row(info_table){
+      const obj = {
+        'ID': info_table.length + 1,
+        'uname': uname.value,
+        'age': age.value,
+        'gender': gender.value,
+        'salary': salary.value,
+        'address': address.value,
+        'date': (new Date()).toLocaleString()
+      }
+      // console.log((new Date()).toLocaleString())
+      // 获取它爹
+      const tbody = document.querySelector('.info_controls tbody')
+      // 创建一行
+      const tb_tr = document.createElement('tr')
+      tb_tr.innerHTML = `
+        <td data-id='${obj.ID}'>${obj.ID}</td>
+        <td>${obj.uname}</td>
+        <td>${obj.age}</td  >
+        <td>${obj.gender}</td>
+        <td>${obj.salary}</td>
+        <td>${obj.address}</td>
+        <td>${obj.date}</td>
+        <td class='delete'>
+          <span><i class="iconfont icon-shanchu"></i>删除<span>
+        </td>
+      `
+      tbody.appendChild(tb_tr)
+      // 推送数据
+      info_table.push(obj)
+      localStorage.setItem('info_table',JSON.stringify(info_table))
+    }
+    // const tbody = document.querySelector('.info_controls tbody')
+    // console.log(tbody)
+    // form表单，提交事件，来获取信息
+    form.addEventListener('submit',function(e){
+      // 阻止提交表单，防止不能操作表单元素
+      e.preventDefault()
+      // console.log(111)
+      if(JSON.parse(localStorage.getItem('info_table'))){
+        // 拉取数据
+        const info_table = JSON.parse(localStorage.getItem('info_table'))
+        // console.log(info_table)
+        // 调用函数，渲染表格
+        render_row(info_table)
+      }else {
+        // 建立本地存储
+        const info_table = []
+        // console.log(info_table)
+        // 调用函数，渲染表格
+        render_row(info_table)
+      }
+      // 更新统计行数
+      updateRowCount()
+      // 提交后刷新表单
+      this.reset()
+    })
+    // 删除行，事件委托
+    tbody.addEventListener('click',function(e){
+      // console.log(e.target.tagName)
+      if(e.target.tagName === 'SPAN'){
+        // 拉取数据
+        const info_table = JSON.parse(localStorage.getItem('info_table'))
+        // 获取删除行的序号
+        const del_ID = e.target.parentNode.parentNode.children[0].dataset.id
+        // console.log(del_ID)
+        // 删除id对应数据
+        info_table.splice((del_ID - 1),1)
+        // 删除行
+        tbody.removeChild(e.target.parentNode.parentNode)
+        // 获取所有ID
+        const ID_all = document.querySelectorAll('.info_controls tbody td[data-id]')
+        // console.log(ID_all)
+        // 修改ID号
+        for(let i = 0; i < info_table.length; i++){
+          info_table[i].ID = i + 1
+          ID_all[i].innerHTML = i + 1
+          ID_all[i].dataset.id = i + 1
+        }  
+        // 推送更新的数据
+        localStorage.setItem('info_table',JSON.stringify(info_table))
+        // 更新统计行数
+        updateRowCount()
+      }
+    })
+  </script>
+</body>
+</html>

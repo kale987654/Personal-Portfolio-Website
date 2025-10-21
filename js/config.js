@@ -10,7 +10,7 @@ const CONFIG = {
             stage: "interest",
             stageText: "独立项目",
             technologies: ["HTML5", "CSS3", "JavaScript", "ES6+", "Git", "Webpack"],
-            demoUrl: "#",
+            demoUrl: "index.html",
             codeUrl: "https://github.com/kale987654/Personal-Portfolio-Website",
             learnings: [
                 "掌握了完整的响应式网站开发流程",
@@ -33,7 +33,7 @@ const CONFIG = {
             stage: "self-learning", 
             stageText: "技术实践",
             technologies: ["HTML5", "CSS3", "JavaScript", "Axios", "API"],
-            demoUrl: "demos/weather/index.html",
+            demoUrl: "./demos/weather/index.html",
             codeUrl: "https://github.com/kale987654/Personal-Portfolio-Website/tree/main/demos/weather",
             learnings: [
                 "掌握了Axios库和异步数据请求",
@@ -56,7 +56,7 @@ const CONFIG = {
             stage: "classroom",
             stageText: "学习实践",
             technologies: ["HTML5", "CSS3", "JavaScript", "LocalStorage"],
-            demoUrl: "demos/library/index.html",
+            demoUrl: "./demos/library/index.html",
             codeUrl: "https://github.com/kale987654/Personal-Portfolio-Website/tree/main/demos/library", 
             learnings: [
                 "掌握了LocalStorage数据持久化存储",
@@ -79,7 +79,7 @@ const CONFIG = {
             stage: "interest",
             stageText: "组件开发", 
             technologies: ["HTML5", "CSS3", "JavaScript", "DOM操作"],
-            demoUrl: "demos/magnifier/index.html",
+            demoUrl: "./demos/magnifier/index.html",
             codeUrl: "https://github.com/kale987654/Personal-Portfolio-Website/tree/main/demos/magnifier",
             learnings: [
                 "深入理解了DOM事件处理和坐标计算",

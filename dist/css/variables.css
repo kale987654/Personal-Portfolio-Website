@@ -1,0 +1,58 @@
+/* CSS变量定义 - 主题系统 */
+:root {
+  /* 深蓝主题 (默认) */
+  --primary-color: #2c3e50;
+  --secondary-color: #34495e;
+  --accent-color: #3498db;
+  --text-primary: #2c3e50;
+  --text-secondary: #5d6d7e;
+  --text-light: #ecf0f1;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-dark: #2c3e50;
+  --border-color: #e0e0e0;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+  
+  /* 字体 */
+  --font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  
+  /* 间距 */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  
+  /* 边框圆角 */
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  
+  /* 过渡动画 */
+  --transition: all 0.3s ease;
+}
+
+/* 森林绿主题 */
+[data-theme="forest-green"] {
+  --primary-color: #1e5631;
+  --secondary-color: #2e7d32;
+  --accent-color: #4caf50;
+  --text-primary: #1b5e20;
+  --text-secondary: #388e3c;
+}
+
+/* 石板灰主题 */
+[data-theme="slate-gray"] {
+  --primary-color: #4a4e69;
+  --secondary-color: #5c6378;
+  --accent-color: #6c757d;
+  --text-primary: #4a4e69;
+  --text-secondary: #5c6378;
+}

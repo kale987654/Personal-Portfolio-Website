@@ -1,0 +1,24 @@
+# 依赖文件
+node_modules/
+npm-debug.log*
+
+# 打包文件（注意：我们手动管理dist）
+# dist/
+
+# 环境变量
+.env
+.env.local
+
+# 日志文件
+*.log
+logs/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 编辑器文件
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>放大镜组件</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      height: 2000px;
+    }
+    .outer {
+      width: 502.5px;
+      height: 400px;
+      /* background-color: gray; */
+      display: flex;
+      margin: 0 auto;
+      position: relative;
+      margin-top: 200px;
+    }
+    .outer .middle {
+      width: 400px;
+      height: 400px;
+      background-color: green;
+      border-radius: 4px;
+      position: relative;
+    }
+    .outer .middle img {
+      width: 100%;
+    }
+    .outer .middle .move_block {
+      width: 200px;
+      height: 200px;
+      background-color: black;
+      opacity: .2;
+      position: absolute;
+      cursor: move;
+      /* display: none; */
+    }
+    .outer .small {
+      width: 92.5px;
+      height: 400px;
+      /* background-color: orange; */
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-left: 10px;
+    }
+    .outer .small img {
+      width: 92.5px;
+      height: 92.5px;
+      border-radius: 4px;
+    }
+    .small img.active {
+      box-shadow: 0 4px 4px rgb(33, 36, 48);
+      transform: translateY(-2px);
+    }
+    .outer .large {
+      width: 400px;
+      height: 400px;
+      background: url(./images/ps1.webp);
+      border-radius: 4px;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgb(0, 0, 0);
+      position: absolute;
+      top: 0;
+      left: 410px;
+      display: none;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div class="outer">
+    <div class="middle">
+      <img src="./images/ps1.webp">
+      <div class="move_block"></div>
+      <!-- 将大盒子放入middle中，large也可以触发mouseover事件，就可以悬浮在large上显示了 -->
+      <div class="large"></div>
+    </div>
+    <div class="small">
+      <img class="active" src="./images/ps1.webp">
+      <img src="./images/ps2.webp">
+      <img src="./images/ps3.webp">
+      <img src="./images/ps4.webp">
+    </div>
+  </div>
+  <script>
+    // 业务需求
+    // 1.鼠标放在小图上，大图显示对应图片
+    // 2.鼠标光标在小图上切换，大图也会变化
+    // 3.鼠标放在大图上，光标上出现一个盒子，跟随鼠标移动
+    // 4.鼠标放在大图上，右侧出现一张大图，里面的图片是放大2倍的
+    // 5.右侧大图放大的位置与左侧大图内的小盒子位置保持对应一致
+    // 6.要求所有显示与切换，都要延迟效果，来回滑动不会出现图片闪动
+    // 7.要求左侧大盒子里的小盒子，不会溢出父容器
+
+    //分析：
+    //1.mouseover、mouseout，可以冒泡，用事件委托，用事件对象e.target锁定小图片
+    //2.切换左侧大图，采用src传递，由于没有位置变化，更改图片即可
+    //3.右侧大图放大效果。原图800*800，盒子400*400，即可实现放大2倍效果
+    //4.右侧大图中图片位置会发生变化，不能用定位，因为放大后的图片本来就溢出父容器了，用背景图片位置，还有背景裁剪
+    //5.位置保持对应一致：左侧图片为400*400，右侧放大的背景图800*800，只要保证位置*2就行
+    //6.获取鼠标位置：水平，鼠标距视口左侧 - 盒子据视口左侧；
+    //           垂直，鼠标距document上侧 - 页面上部卷去的长度 - 盒子距视口上侧；
+
+    //获取small
+    const small = document.querySelector('.outer .small')
+    // 获取中等盒子
+    const middle = document.querySelector('.outer .middle')
+    //获取middle里的img
+    const mid_img = middle.children[0]
+    // console.log(mid_img)
+    // 获取移动的小盒子
+    const move_block = middle.children[1]
+    // console.log(move_block)
+    // 获取大盒子
+    const large = document.querySelector('.outer .large')
+    // console.log(large)
+    // console.log(middle)
+    //给small事件委托，操控图片
+    small.addEventListener('mouseover',function(e){
+      // console.log(e.target)
+      // console.log(e.target.tagName)
+      if(e.target.tagName === 'IMG'){
+        // console.log(e.target.src)
+        //将small里图片的src，传递给middle里的img
+        mid_img.src = e.target.src
+        //为鼠标悬浮的图片添加类名active
+        const sm_img_act = document.querySelector('.small img.active')
+        // console.log(sm_img_act)
+        //添加前，清除类名
+        sm_img_act ? sm_img_act.classList.remove('active') : 0
+        //添加
+        e.target.classList.add('active')
+      }
+    })
+    // 声明定时变量
+    let timer
+    let timer1
+    //给middle，事件委托，给所有子节点都mouseover来显示large背景图
+    //不用e.target，因为move_block也要冒泡
+    middle.addEventListener('mouseover',function(){
+      // console.log(mid_img.src)
+      clearTimeout(timer)
+      // 传递图片
+      large.style.background = `url(${mid_img.src})`
+      timer1 = setTimeout(function(){
+        // 显示大盒子
+        large.style.display = 'block'
+        // 显示move_block
+        move_block.style.display = 'block'
+      },200)
+    })
+    middle.addEventListener('mouseout',function(){
+      clearTimeout(timer1)
+      timer = setTimeout(function(){
+        // 显示大盒子
+        large.style.display = 'none'
+        // 隐藏move_block
+        move_block.style.display = 'none'
+      },200) 
+      
+    })
+  
+    //middle，mousemove事件
+    middle.addEventListener('mousemove',function(e){
+      //显示move_block
+      // move_block.style.display = 'block'
+      //获取鼠标指针在middle内的坐标
+      let x = e.pageX - middle.getBoundingClientRect().x
+      let y = e.pageY - document.documentElement.scrollTop - middle.getBoundingClientRect().y
+      // console.log(x,y)
+      //鼠标据document的距离
+      // console.log(e.pageX,e.pageY)
+      //元素距document的距离
+      // console.log(middle.getBoundingClientRect().x)
+      // console.log(middle.getBoundingClientRect().y)
+      //document的html元素卷去的jvl
+      // console.log(document.documentElement.scrollTop)
+      //获取move_block移动的距离
+      let m_x,m_y
+      if(x > 100 && x < 300){
+        m_x = x - 100
+      }else if(x < 100) {
+        m_x = 0
+      }else {
+        m_x = 200
+      }
+      if(y > 100 && y < 300){
+        m_y = y - 100
+      }else if(y < 100) {
+        m_y = 0
+      }else {
+        m_y = 200
+      }
+      move_block.style.left = `${m_x}px`
+      move_block.style.top = `${m_y}px`
+      large.style.backgroundPosition = `${-2 * m_x}px ${-2 * m_y}px` 
+    })
+    // middle.addEventListener('mouseleave',function(){
+    //   //隐藏move_block
+    //   move_block.style.display = 'none'
+    // })
+  </script>
+</body>
+</html>
